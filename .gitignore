@@ -1,0 +1,35 @@
+# ---------- Dependencias ----------
+/backend/vendor/
+/frontend/node_modules/
+node_modules/
+
+# ---------- Variables de entorno ----------
+.env
+.env.*
+!.env.example
+
+# ---------- Base de datos local ----------
+/backend/database/*.sqlite
+/backend/database/*.sqlite-journal
+
+# ---------- Archivos generados por Laravel ----------
+/backend/storage/*.key
+/backend/storage/framework/cache/data/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/views/*
+/backend/storage/logs/*
+/backend/bootstrap/cache/*
+/backend/public/storage
+/backend/public/hot
+
+# ---------- Compilados del frontend ----------
+/frontend/dist/
+/frontend/.vite/
+
+# ---------- Editores y sistema operativo ----------
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+Desktop.ini
+.DS_Store
