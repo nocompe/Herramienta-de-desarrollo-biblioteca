@@ -1,0 +1,16 @@
+Merge made by the 'ort' strategy.
+ .../app/Http/Controllers/Api/SocioController.php   | 107 +++++++++++
+ backend/app/Models/Socio.php                       |  52 ++++++
+ .../2026_09_08_110000_create_socios_table.php      |  32 ++++
+ backend/database/seeders/DatabaseSeeder.php        |   1 +
+ backend/database/seeders/SocioSeeder.php           |  27 +++
+ backend/routes/api.php                             |   2 +
+ frontend/src/App.jsx                               |   2 +
+ frontend/src/components/Navbar.jsx                 |   3 +
+ frontend/src/pages/Socios.jsx                      | 202 +++++++++++++++++++++
+ 9 files changed, 428 insertions(+)
+ create mode 100644 backend/app/Http/Controllers/Api/SocioController.php
+ create mode 100644 backend/app/Models/Socio.php
+ create mode 100644 backend/database/migrations/2026_09_08_110000_create_socios_table.php
+ create mode 100644 backend/database/seeders/SocioSeeder.php
+ create mode 100644 frontend/src/pages/Socios.jsx

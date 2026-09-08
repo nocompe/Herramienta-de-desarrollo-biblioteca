@@ -1,0 +1,16 @@
+Merge made by the 'ort' strategy.
+ .../app/Http/Controllers/Api/LibroController.php   | 107 +++++++++++
+ backend/app/Models/Libro.php                       |  38 ++++
+ .../2026_09_08_100000_create_libros_table.php      |  32 ++++
+ backend/database/seeders/DatabaseSeeder.php        |   1 +
+ backend/database/seeders/LibroSeeder.php           |  28 +++
+ backend/routes/api.php                             |   1 +
+ frontend/src/App.jsx                               |  72 +++----
+ frontend/src/components/Navbar.jsx                 |  49 ++---
+ frontend/src/pages/Libros.jsx                      | 211 +++++++++++++++++++++
+ 9 files changed, 481 insertions(+), 58 deletions(-)
+ create mode 100644 backend/app/Http/Controllers/Api/LibroController.php
+ create mode 100644 backend/app/Models/Libro.php
+ create mode 100644 backend/database/migrations/2026_09_08_100000_create_libros_table.php
+ create mode 100644 backend/database/seeders/LibroSeeder.php
+ create mode 100644 frontend/src/pages/Libros.jsx

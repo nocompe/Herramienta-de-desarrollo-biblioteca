@@ -1,0 +1,91 @@
+Auto-merging backend/routes/api.php
+Auto-merging frontend/src/App.jsx
+Auto-merging frontend/src/components/Navbar.jsx
+CONFLICT (content): Merge conflict in frontend/src/components/Navbar.jsx
+Automatic merge failed; fix conflicts and then commit the result.
+--- git status ---
+On branch develop
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+	new file:   backend/app/Http/Controllers/Api/ReporteController.php
+	modified:   backend/routes/api.php
+	modified:   frontend/src/App.jsx
+	modified:   frontend/src/index.css
+	new file:   frontend/src/pages/Dashboard.jsx
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   frontend/src/components/Navbar.jsx
+
+--- archivo en conflicto ---
+<<<<<<< HEAD
+import { NavLink } from "react-router-dom";
+
+/**
+ * Barra de navegacion principal de BiblioTech UTP.
+ */
+function Navbar() {
+  return (
+    <nav className="navbar">
+      <span className="navbar-marca">BiblioTech UTP</span>
+      <ul className="navbar-enlaces">
+        <li>
+          <NavLink to="/">Inicio</NavLink>
+        </li>
+        {/* --- ENLACE MODULO 1 --- */}
+        <li>
+          <NavLink to="/libros">Libros</NavLink>
+        </li>
+        {/* --- ENLACE MODULO 2 --- */}
+        <li>
+          <NavLink to="/socios">Socios</NavLink>
+        </li>
+        {/* --- ENLACE MODULO 3 --- */}
+        <li>
+          <NavLink to="/prestamos">Prestamos</NavLink>
+        </li>
+        {/* --- ENLACE MODULO 4 --- */}
+      </ul>
+    </nav>
+  );
+}
+
+export default Navbar;
+=======
+import { NavLink } from "react-router-dom";
+
+/**
+ * Barra de navegacion principal de BiblioTech UTP.
+ * Rediseno del modulo 4: se agrupan los enlaces en un contenedor propio,
+ * se agrega el subtitulo de la marca y el acceso al dashboard.
+ */
+function Navbar() {
+  return (
+    <nav className="navbar">
+      <div className="navbar-identidad">
+        <span className="navbar-marca">BiblioTech UTP</span>
+        <span className="navbar-subtitulo">Sistema de Gestion de Biblioteca</span>
+      </div>
+      <ul className="navbar-enlaces">
+        <li>
+          <NavLink to="/">Inicio</NavLink>
+        </li>
+        <li>
+          <NavLink to="/libros">Libros</NavLink>
+        </li>
+        <li>
+          <NavLink to="/socios">Socios</NavLink>
+        </li>
+        <li>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+export default Navbar;
+>>>>>>> feature/reportes-dashboard

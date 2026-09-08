@@ -1,0 +1,7 @@
+  develop
+  feature/catalogo-libros
+  feature/gestion-socios
+  feature/prestamos
+  feature/reportes-dashboard
+  hotfix/respuestas-json
+* main
