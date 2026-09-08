@@ -1,0 +1,16 @@
+Merge made by the 'ort' strategy.
+ .../Http/Controllers/Api/PrestamoController.php    | 140 +++++++++++++++
+ backend/app/Models/Prestamo.php                    |  69 ++++++++
+ .../2026_09_08_120000_create_prestamos_table.php   |  35 ++++
+ backend/database/seeders/DatabaseSeeder.php        |   1 +
+ backend/database/seeders/PrestamoSeeder.php        |  60 +++++++
+ backend/routes/api.php                             |   3 +
+ frontend/src/App.jsx                               |   2 +
+ frontend/src/components/Navbar.jsx                 |   3 +
+ frontend/src/pages/Prestamos.jsx                   | 187 +++++++++++++++++++++
+ 9 files changed, 500 insertions(+)
+ create mode 100644 backend/app/Http/Controllers/Api/PrestamoController.php
+ create mode 100644 backend/app/Models/Prestamo.php
+ create mode 100644 backend/database/migrations/2026_09_08_120000_create_prestamos_table.php
+ create mode 100644 backend/database/seeders/PrestamoSeeder.php
+ create mode 100644 frontend/src/pages/Prestamos.jsx

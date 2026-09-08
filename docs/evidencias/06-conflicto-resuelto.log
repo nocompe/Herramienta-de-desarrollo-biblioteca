@@ -1,0 +1,9 @@
+commit f7a8ba7faf25958c84ff360100c30b06d35d3b29
+Merge: 196fbc3 29992d0
+Author: nocompe <mgonzalezdelvallevargas@gmail.com>
+Date:   Tue Sep 8 11:25:01 2026 -0500
+
+    Merge branch 'feature/reportes-dashboard' into develop
+    
+    # Conflicts:
+    #       frontend/src/components/Navbar.jsx
