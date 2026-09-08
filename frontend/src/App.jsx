@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Inicio from "./pages/Inicio.jsx";
 // --- IMPORTS MODULO 1 ---
+import Libros from "./pages/Libros.jsx";
 // --- IMPORTS MODULO 2 ---
 // --- IMPORTS MODULO 3 ---
 // --- IMPORTS MODULO 4 ---
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Inicio />} />
           {/* --- RUTAS MODULO 1 --- */}
+          <Route path="/libros" element={<Libros />} />
           {/* --- RUTAS MODULO 2 --- */}
           {/* --- RUTAS MODULO 3 --- */}
           {/* --- RUTAS MODULO 4 --- */}

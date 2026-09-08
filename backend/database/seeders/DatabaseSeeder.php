@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // --- SEEDERS MODULO 1 ---
+        $this->call(LibroSeeder::class);
         // --- SEEDERS MODULO 2 ---
         // --- SEEDERS MODULO 3 ---
     }
