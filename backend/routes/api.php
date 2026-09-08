@@ -32,3 +32,6 @@ Route::post('prestamos', [\App\Http\Controllers\Api\PrestamoController::class, '
 Route::patch('prestamos/{prestamo}/devolucion', [\App\Http\Controllers\Api\PrestamoController::class, 'registrarDevolucion']);
 
 // --- ZONA MODULO 4: REPORTES Y DASHBOARD (feature/reportes-dashboard) ---
+Route::get('reportes/indicadores', [\App\Http\Controllers\Api\ReporteController::class, 'indicadores']);
+Route::get('reportes/libros-mas-prestados', [\App\Http\Controllers\Api\ReporteController::class, 'librosMasPrestados']);
+Route::get('reportes/prestamos-vencidos', [\App\Http\Controllers\Api\ReporteController::class, 'prestamosVencidos']);
