@@ -20,6 +20,7 @@ Route::get('/ping', function () {
 });
 
 // --- ZONA MODULO 1: CATALOGO DE LIBROS (feature/catalogo-libros) ---
+Route::apiResource('libros', \App\Http\Controllers\Api\LibroController::class);
 
 // --- ZONA MODULO 2: GESTION DE SOCIOS (feature/gestion-socios) ---
 
