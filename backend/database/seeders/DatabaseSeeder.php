@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         // --- SEEDERS MODULO 1 ---
         $this->call(LibroSeeder::class);
         // --- SEEDERS MODULO 2 ---
+        $this->call(SocioSeeder::class);
         // --- SEEDERS MODULO 3 ---
     }
 }

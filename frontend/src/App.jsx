@@ -4,6 +4,7 @@ import Inicio from "./pages/Inicio.jsx";
 // --- IMPORTS MODULO 1 ---
 import Libros from "./pages/Libros.jsx";
 // --- IMPORTS MODULO 2 ---
+import Socios from "./pages/Socios.jsx";
 // --- IMPORTS MODULO 3 ---
 // --- IMPORTS MODULO 4 ---
 
@@ -22,6 +23,7 @@ function App() {
           {/* --- RUTAS MODULO 1 --- */}
           <Route path="/libros" element={<Libros />} />
           {/* --- RUTAS MODULO 2 --- */}
+          <Route path="/socios" element={<Socios />} />
           {/* --- RUTAS MODULO 3 --- */}
           {/* --- RUTAS MODULO 4 --- */}
           <Route path="*" element={<h2>404 - Pagina no encontrada</h2>} />
