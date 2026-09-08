@@ -29,3 +29,6 @@ Route::patch('socios/{socio}/estado', [\App\Http\Controllers\Api\SocioController
 // --- ZONA MODULO 3: PRESTAMOS Y DEVOLUCIONES (feature/prestamos) ---
 
 // --- ZONA MODULO 4: REPORTES Y DASHBOARD (feature/reportes-dashboard) ---
+Route::get('reportes/indicadores', [\App\Http\Controllers\Api\ReporteController::class, 'indicadores']);
+Route::get('reportes/libros-mas-prestados', [\App\Http\Controllers\Api\ReporteController::class, 'librosMasPrestados']);
+Route::get('reportes/prestamos-vencidos', [\App\Http\Controllers\Api\ReporteController::class, 'prestamosVencidos']);
