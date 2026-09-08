@@ -20,6 +20,9 @@ function Navbar() {
           <NavLink to="/socios">Socios</NavLink>
         </li>
         {/* --- ENLACE MODULO 3 --- */}
+        <li>
+          <NavLink to="/prestamos">Prestamos</NavLink>
+        </li>
         {/* --- ENLACE MODULO 4 --- */}
       </ul>
     </nav>

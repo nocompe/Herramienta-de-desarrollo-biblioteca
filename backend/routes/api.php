@@ -27,5 +27,8 @@ Route::apiResource('socios', \App\Http\Controllers\Api\SocioController::class);
 Route::patch('socios/{socio}/estado', [\App\Http\Controllers\Api\SocioController::class, 'cambiarEstado']);
 
 // --- ZONA MODULO 3: PRESTAMOS Y DEVOLUCIONES (feature/prestamos) ---
+Route::get('prestamos', [\App\Http\Controllers\Api\PrestamoController::class, 'index']);
+Route::post('prestamos', [\App\Http\Controllers\Api\PrestamoController::class, 'store']);
+Route::patch('prestamos/{prestamo}/devolucion', [\App\Http\Controllers\Api\PrestamoController::class, 'registrarDevolucion']);
 
 // --- ZONA MODULO 4: REPORTES Y DASHBOARD (feature/reportes-dashboard) ---
