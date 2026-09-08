@@ -7,6 +7,7 @@ import Libros from "./pages/Libros.jsx";
 import Socios from "./pages/Socios.jsx";
 // --- IMPORTS MODULO 3 ---
 // --- IMPORTS MODULO 4 ---
+import Dashboard from "./pages/Dashboard.jsx";
 
 /**
  * Componente raiz de BiblioTech UTP.
@@ -26,6 +27,7 @@ function App() {
           <Route path="/socios" element={<Socios />} />
           {/* --- RUTAS MODULO 3 --- */}
           {/* --- RUTAS MODULO 4 --- */}
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="*" element={<h2>404 - Pagina no encontrada</h2>} />
         </Routes>
       </main>
