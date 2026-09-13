@@ -41,8 +41,10 @@ function Dashboard() {
     : [];
 
   return (
-    <section>
-      <h1>Dashboard de la Biblioteca</h1>
+    <section className="container" style={{ marginTop: '40px', marginBottom: '40px' }}>
+      <div className="page-header">
+        <h1>Dashboard de la Biblioteca</h1>
+      </div>
 
       {error && <div className="alerta error">{error}</div>}
 
