@@ -1,0 +1,15 @@
+  develop
+  feature/catalogo-libros
+  feature/gestion-socios
+  feature/prestamos
+  feature/reportes-dashboard
+  hotfix/respuestas-json
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/develop
+  remotes/origin/feature/catalogo-libros
+  remotes/origin/feature/gestion-socios
+  remotes/origin/feature/prestamos
+  remotes/origin/feature/reportes-dashboard
+  remotes/origin/hotfix/respuestas-json
+  remotes/origin/main
