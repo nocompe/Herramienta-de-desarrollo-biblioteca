@@ -1,38 +1,47 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-/**
- * Barra de navegacion principal de BiblioTech UTP.
- * Rediseno del modulo 4: se agrupan los enlaces en un contenedor propio,
- * se agrega el subtitulo de la marca y el acceso al dashboard.
- * Resolucion del conflicto: se conserva ademas el enlace a Prestamos
- * incorporado por el modulo 3.
- */
-function Navbar() {
+const Navbar = () => {
+  const { isAuthenticated, logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <nav className="navbar">
-      <div className="navbar-identidad">
-        <span className="navbar-marca">BiblioTech UTP</span>
-        <span className="navbar-subtitulo">Sistema de Gestion de Biblioteca</span>
+      <div className="container nav-content">
+        <Link to="/" className="nav-brand" style={{textDecoration: 'none'}}>
+          <h1 className="brand-title">BiblioTech UTP</h1>
+          <span className="brand-subtitle">Sistema de Gestión de Biblioteca</span>
+        </Link>
+        <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>Inicio</NavLink>
+          <NavLink to="/libros" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Libros</NavLink>
+          <NavLink to="/socios" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Socios</NavLink>
+          <NavLink to="/prestamos" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Préstamos</NavLink>
+          <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Dashboard</NavLink>
+          
+          <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '20px' }}>
+            {isAuthenticated ? (
+              <>
+                <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>{user?.name || 'Admin'}</span>
+                <button onClick={handleLogout} className="btn" style={{ padding: '6px 12px', fontSize: '0.85rem', backgroundColor: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                  Salir
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
+                Ingresar
+              </Link>
+            )}
+          </div>
+        </div>
       </div>
-      <ul className="navbar-enlaces">
-        <li>
-          <NavLink to="/">Inicio</NavLink>
-        </li>
-        <li>
-          <NavLink to="/libros">Libros</NavLink>
-        </li>
-        <li>
-          <NavLink to="/socios">Socios</NavLink>
-        </li>
-        <li>
-          <NavLink to="/prestamos">Prestamos</NavLink>
-        </li>
-        <li>
-          <NavLink to="/dashboard">Dashboard</NavLink>
-        </li>
-      </ul>
     </nav>
   );
-}
+};
 
 export default Navbar;
