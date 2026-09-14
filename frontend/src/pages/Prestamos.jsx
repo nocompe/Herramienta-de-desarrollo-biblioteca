@@ -75,14 +75,16 @@ function Prestamos() {
     <section>
       <div className="page-header">
         <h1>Préstamos y Devoluciones</h1>
-        <button onClick={() => setModalAbierto(true)}>+ Nuevo Préstamo</button>
+        <button onClick={() => setModalAbierto(true)} className="boton-primario">
+          + Registrar nuevo préstamo
+          </button>
       </div>
 
       {error && <div className="alerta error">{error}</div>}
       {exito && <div className="alerta exito">{exito}</div>}
 
       <div className="tarjeta">
-        <label htmlFor="filtro">Filtrar prestamos</label>
+        <label htmlFor="filtro">Filtrar prestamos ({prestamos.length} resultado{prestamos.length !== 1 ? "s" : ""})</label>
         <select id="filtro" value={filtro} onChange={(e) => cambiarFiltro(e.target.value)}>
           <option value="todos">Todos</option>
           <option value="activo">Solo activos</option>
