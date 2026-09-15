@@ -36,3 +36,7 @@ Desktop.ini
 
 # Archivos temporales de Microsoft Office
 ~$*
+
+# Entregables: viven fuera del repositorio, en la carpeta entrega/
+*.docx
+*.pptx
