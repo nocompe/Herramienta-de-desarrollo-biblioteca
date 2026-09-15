@@ -125,7 +125,7 @@ function Socios() {
             </select>
           </div>
           <div>
-            <button type="submit">{editandoId ? "Actualizar" : "Registrar"}</button>{" "}
+            <button type="submit">{editandoId ? "Actualizar datos" : "+ Registrar socio"}</button>{" "}
             {editandoId && (
               <button
                 type="button"
@@ -143,7 +143,7 @@ function Socios() {
       </div>
 
       <div className="tarjeta">
-        <label htmlFor="buscarSocio">Buscar por nombre, DNI o correo</label>
+        <label htmlFor="buscarSocio">Buscar por nombre, DNI o correo ({socios.length} socio{socios.length !== 1 ? "s" : ""} encontrado{socios.length !== 1 ? "s" : ""})</label>
         <input
           id="buscarSocio"
           value={buscar}
@@ -151,7 +151,7 @@ function Socios() {
             setBuscar(e.target.value);
             cargarSocios(e.target.value);
           }}
-          placeholder="Ej. 70123456"
+          placeholder="Buscar por DNI, nombres o correo institucional..."
         />
       </div>
 
