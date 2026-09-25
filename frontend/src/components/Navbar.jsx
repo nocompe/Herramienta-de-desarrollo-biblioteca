@@ -1,29 +1,47 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
 
 const Navbar = () => {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const handleLogout = () => {
     logout();
+    setMenuAbierto(false);
     navigate('/');
   };
+
+  const cerrarMenu = () => setMenuAbierto(false);
 
   return (
     <nav className="navbar">
       <div className="container nav-content">
-        <Link to="/" className="nav-brand" style={{textDecoration: 'none'}}>
+        <Link to="/" className="nav-brand" style={{ textDecoration: 'none' }} onClick={cerrarMenu}>
           <h1 className="brand-title">BiblioTech UTP</h1>
           <span className="brand-subtitle">Sistema de Gestión de Biblioteca</span>
         </Link>
-        <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>Inicio</NavLink>
-          <NavLink to="/libros" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Libros</NavLink>
-          <NavLink to="/socios" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Socios</NavLink>
-          <NavLink to="/prestamos" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Préstamos</NavLink>
-          <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Dashboard</NavLink>
-          
+
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-label="Abrir menú"
+          aria-expanded={menuAbierto}
+          onClick={() => setMenuAbierto((prev) => !prev)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div className={`nav-links ${menuAbierto ? 'open' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end onClick={cerrarMenu}>Inicio</NavLink>
+          <NavLink to="/libros" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={cerrarMenu}>Libros</NavLink>
+          <NavLink to="/socios" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={cerrarMenu}>Socios</NavLink>
+          <NavLink to="/prestamos" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={cerrarMenu}>Préstamos</NavLink>
+          <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={cerrarMenu}>Dashboard</NavLink>
+
           <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '20px' }}>
             {isAuthenticated ? (
               <>
@@ -33,7 +51,7 @@ const Navbar = () => {
                 </button>
               </>
             ) : (
-              <Link to="/login" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
+              <Link to="/login" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.85rem' }} onClick={cerrarMenu}>
                 Ingresar
               </Link>
             )}
