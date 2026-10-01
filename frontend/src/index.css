@@ -99,9 +99,42 @@ body {
   letter-spacing: 0.5px;
 }
 
+.nav-brand {
+  text-decoration: none;
+}
+
 .nav-links {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-sesion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 10px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-usuario {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.btn-salir {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .nav-link {
@@ -584,7 +617,7 @@ td button {
 
 .features-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 30px;
 }
 
@@ -674,11 +707,11 @@ td button {
   }
 
   .nav-links {
-    display: none !important;
+    display: none;
     width: 100%;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 8px !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
     background: rgba(15, 23, 42, 0.98);
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 12px;
@@ -688,20 +721,40 @@ td button {
   }
 
   .nav-links.open {
-    display: flex !important;
+    display: flex;
   }
 
-  .nav-links > div {
-    border-left: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
+  .nav-sesion {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .nav-link {
     width: 100%;
     text-align: center;
+  }
+
+  .hero-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 40px 24px;
+    min-height: 0;
+  }
+
+  .hero-content,
+  .hero-image-wrapper {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .hero-title {
+    font-size: 2.6rem;
   }
 
   .contenido {
@@ -751,6 +804,34 @@ td button {
 
   .formulario > div:last-child button {
     width: 100%;
+  }
+
+  .hero-section {
+    padding: 32px 18px;
+    gap: 22px;
+  }
+
+  .hero-title {
+    font-size: 1.95rem;
+    letter-spacing: -0.5px;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .api-badge {
+    font-size: 0.78rem;
   }
 
   .modal-content {
@@ -859,7 +940,7 @@ td button {
 /* DASHBOARD INDICADORES */
 .panel-indicadores {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: 24px;
   margin-bottom: 40px;
 }
