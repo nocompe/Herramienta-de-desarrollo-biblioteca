@@ -1,0 +1,64 @@
+*   92ca524 (origin/develop, develop) Merge branch 'main' into develop - mejoras de UI/UX e informe corregido
+|\  
+| *   a2a73a9 (HEAD -> main, origin/main, origin/HEAD) Merge branch 'main' de origin - integrar mejoras de UI/UX de balvinsebas64-prog
+| |\  
+| | * 56502d3 Mejoras de UI/UX: rediseño del Dashboard, fondo con olas y simulación de Login
+| * | fec06c2 chore: ignorar archivos temporales de Office y quitar el bloqueo subido por error
+| * |   8eb63c1 Merge branch 'develop' into main - correcciones del informe
+| |\ \  
+| |/ /  
+|/| /   
+| |/    
+* | 6a0ac21 docs: corregir portada, indice y encabezado del informe del Avance 1
+| *   5f61eae Merge branch 'develop' into main - informe del Avance 1
+| |\  
+| |/  
+|/|   
+* | dc30c21 docs: agregar informe del Avance 1 en formato Word
+| *   252986a Merge branch 'develop' into main - documentacion y evidencias
+| |\  
+| |/  
+|/|   
+* | 08d4e00 docs: agregar evidencias de comandos Git, diagramas y capturas del sistema
+* |   cac8659 Merge branch 'hotfix/respuestas-json' into develop
+|\ \  
+| | *   042c47b (tag: v1.0.1) Merge branch 'hotfix/respuestas-json' into main
+| | |\  
+| | |/  
+| |/|   
+| * | 012289e (origin/hotfix/respuestas-json, hotfix/respuestas-json) fix(api): forzar respuestas JSON en /api/* para que los errores de validacion no devuelvan HTML
+| |/  
+| *   6ea7e9d (tag: v1.0.0) Merge branch 'develop' into main - Release v1.0.0
+| |\  
+| |/  
+|/|   
+* | 8f0e25c docs(readme): documentar modulos, endpoints de la API e instrucciones de instalacion
+* |   f7a8ba7 Merge branch 'feature/reportes-dashboard' into develop
+|\ \  
+| * | 29992d0 (origin/feature/reportes-dashboard, feature/reportes-dashboard) style(ui): redisenar Navbar con identidad de marca y estilos del dashboard
+| * | e606356 feat(dashboard): agregar Dashboard.jsx con tarjetas de indicadores y prestamos vencidos
+| * | 0db52f5 feat(reportes): implementar ReporteController con indicadores y ranking de libros
+* | |   196fbc3 Merge branch 'feature/prestamos' into develop
+|\ \ \  
+| |/ /  
+|/| |   
+| * | 3a50c2e (origin/feature/prestamos, feature/prestamos) feat(prestamos): agregar pagina Prestamos.jsx con devolucion y calculo de retraso
+| * | 02be4fd feat(prestamos): implementar registro de prestamo con las cuatro reglas de negocio
+| * | a14aad6 feat(prestamos): crear migracion y modelo Prestamo con relaciones a libro y socio
+|/ /  
+* |   98c38bb Merge branch 'feature/gestion-socios' into develop
+|\ \  
+| * | 0dbfb27 (origin/feature/gestion-socios, feature/gestion-socios) feat(socios): agregar pagina Socios.jsx con suspension y reactivacion de socios
+| * | d9bdff3 feat(socios): implementar SocioController con validacion de DNI y correo unicos
+| * | fd60ae2 feat(socios): crear migracion y modelo Socio con limites de prestamo por tipo
+|/ /  
+* |   cdb137c Merge branch 'feature/catalogo-libros' into develop
+|\ \  
+| |/  
+|/|   
+| * e121337 (origin/feature/catalogo-libros, feature/catalogo-libros) feat(libros): agregar pagina Libros.jsx con formulario, tabla y seeder de datos
+| * 98291c4 feat(libros): implementar LibroController con CRUD y busqueda por titulo, autor e ISBN
+| * 95d64e9 feat(libros): crear migracion y modelo Libro con control de ejemplares
+|/  
+* d4fbc2c docs: agregar README del proyecto y guia para colaboradores
+* b5b4952 chore: inicializar proyecto con Laravel 12 (backend) y React 19 + Vite (frontend)

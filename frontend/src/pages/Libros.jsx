@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import client from "../api/client.js";
+import Modal from "../components/Modal.jsx";
 
 const FORMULARIO_VACIO = {
   titulo: "",
@@ -11,10 +12,6 @@ const FORMULARIO_VACIO = {
   ejemplares_totales: 1,
 };
 
-/**
- * MODULO 1 - Catalogo de Libros
- * Permite registrar, buscar, editar y eliminar libros del catalogo.
- */
 function Libros() {
   const [libros, setLibros] = useState([]);
   const [formulario, setFormulario] = useState(FORMULARIO_VACIO);
@@ -22,12 +19,11 @@ function Libros() {
   const [buscar, setBuscar] = useState("");
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
+  const [modalAbierto, setModalAbierto] = useState(false);
 
   const cargarLibros = async (texto = "") => {
     try {
-      const { data } = await client.get("/libros", {
-        params: texto ? { buscar: texto } : {},
-      });
+      const { data } = await client.get("/libros", { params: texto ? { buscar: texto } : {} });
       setLibros(data.datos);
       setError("");
     } catch (e) {
@@ -35,9 +31,7 @@ function Libros() {
     }
   };
 
-  useEffect(() => {
-    cargarLibros();
-  }, []);
+  useEffect(() => { cargarLibros(); }, []);
 
   const cambiar = (evento) => {
     const { name, value } = evento.target;
@@ -46,8 +40,7 @@ function Libros() {
 
   const guardar = async (evento) => {
     evento.preventDefault();
-    setError("");
-    setExito("");
+    setError(""); setExito("");
     try {
       if (editandoId) {
         await client.put("/libros/" + editandoId, formulario);
@@ -56,8 +49,7 @@ function Libros() {
         await client.post("/libros", formulario);
         setExito("Libro registrado correctamente.");
       }
-      setFormulario(FORMULARIO_VACIO);
-      setEditandoId(null);
+      cerrarModal();
       cargarLibros(buscar);
     } catch (e) {
       setError(e.message);
@@ -75,7 +67,7 @@ function Libros() {
       anio_publicacion: libro.anio_publicacion || "",
       ejemplares_totales: libro.ejemplares_totales,
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setModalAbierto(true);
   };
 
   const eliminar = async (libro) => {
@@ -89,15 +81,71 @@ function Libros() {
     }
   };
 
+  const cerrarModal = () => {
+    setModalAbierto(false);
+    setEditandoId(null);
+    setFormulario(FORMULARIO_VACIO);
+  };
+
   return (
-    <section>
-      <h1>Catalogo de Libros</h1>
+    <section className="container" style={{ marginTop: '40px', marginBottom: '40px' }}>
+      <div className="page-header">
+        <h1>Catálogo de Libros</h1>
+        <button onClick={() => setModalAbierto(true)}>+ Nuevo Libro</button>
+      </div>
 
       {error && <div className="alerta error">{error}</div>}
       {exito && <div className="alerta exito">{exito}</div>}
 
       <div className="tarjeta">
-        <h2>{editandoId ? "Editar libro" : "Registrar nuevo libro"}</h2>
+        <label htmlFor="buscar">Buscar por titulo, autor o ISBN</label>
+        <input
+          id="buscar"
+          value={buscar}
+          onChange={(e) => {
+            setBuscar(e.target.value);
+            cargarLibros(e.target.value);
+          }}
+          placeholder="Ej. Vargas Llosa"
+        />
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Titulo</th>
+            <th>Autor</th>
+            <th>ISBN</th>
+            <th>Categoria</th>
+            <th>Disponibles</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {libros.length === 0 && <tr><td colSpan="6">No hay libros registrados.</td></tr>}
+          {libros.map((libro) => (
+            <tr key={libro.id}>
+              <td>{libro.titulo}</td>
+              <td>{libro.autor}</td>
+              <td>{libro.isbn}</td>
+              <td>{libro.categoria}</td>
+              <td>
+                <span className={libro.ejemplares_disponibles > 0 ? "badge activo" : "badge inactivo"}>
+                  {libro.ejemplares_disponibles} / {libro.ejemplares_totales}
+                </span>
+              </td>
+              <td>
+                <div className="acciones-tabla">
+                  <button className="secundario" onClick={() => editar(libro)}>Editar</button>
+                  <button className="peligro" onClick={() => eliminar(libro)}>Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Modal isOpen={modalAbierto} onClose={cerrarModal} titulo={editandoId ? "Editar libro" : "Registrar nuevo libro"}>
         <form className="formulario" onSubmit={guardar}>
           <div>
             <label htmlFor="titulo">Titulo</label>
@@ -134,76 +182,11 @@ function Libros() {
             <input id="ejemplares" name="ejemplares_totales" type="number" min="1" value={formulario.ejemplares_totales} onChange={cambiar} required />
           </div>
           <div>
-            <button type="submit">{editandoId ? "Actualizar" : "Registrar"}</button>{" "}
-            {editandoId && (
-              <button
-                type="button"
-                className="secundario"
-                onClick={() => {
-                  setEditandoId(null);
-                  setFormulario(FORMULARIO_VACIO);
-                }}
-              >
-                Cancelar
-              </button>
-            )}
+            <button type="submit">{editandoId ? "Actualizar" : "Registrar"}</button>
+            <button type="button" className="secundario" onClick={cerrarModal} style={{marginLeft: '12px'}}>Cancelar</button>
           </div>
         </form>
-      </div>
-
-      <div className="tarjeta">
-        <label htmlFor="buscar">Buscar por titulo, autor o ISBN</label>
-        <input
-          id="buscar"
-          value={buscar}
-          onChange={(e) => {
-            setBuscar(e.target.value);
-            cargarLibros(e.target.value);
-          }}
-          placeholder="Ej. Vargas Llosa"
-        />
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Titulo</th>
-            <th>Autor</th>
-            <th>ISBN</th>
-            <th>Categoria</th>
-            <th>Disponibles</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {libros.length === 0 && (
-            <tr>
-              <td colSpan="6">No hay libros registrados.</td>
-            </tr>
-          )}
-          {libros.map((libro) => (
-            <tr key={libro.id}>
-              <td>{libro.titulo}</td>
-              <td>{libro.autor}</td>
-              <td>{libro.isbn}</td>
-              <td>{libro.categoria}</td>
-              <td>
-                <span className={libro.ejemplares_disponibles > 0 ? "badge activo" : "badge inactivo"}>
-                  {libro.ejemplares_disponibles} / {libro.ejemplares_totales}
-                </span>
-              </td>
-              <td>
-                <button className="secundario" onClick={() => editar(libro)}>
-                  Editar
-                </button>{" "}
-                <button className="peligro" onClick={() => eliminar(libro)}>
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      </Modal>
     </section>
   );
 }
