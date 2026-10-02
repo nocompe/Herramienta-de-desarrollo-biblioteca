@@ -4,6 +4,116 @@ import Modal from "../components/Modal.jsx";
 
 const FORMULARIO_VACIO = { libro_id: "", socio_id: "", dias_plazo: 7 };
 
+const escapeHtml = (value = "") =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const descargarInformePdf = (prestamos, setError) => {
+  if (!prestamos.length) {
+    setError("No hay préstamos para exportar en este momento.");
+    return;
+  }
+
+  const filas = prestamos.map((prestamo) => {
+    const socio = `${prestamo.socio?.nombres ?? ""} ${prestamo.socio?.apellidos ?? ""}`.trim();
+    const estado = prestamo.estado === "devuelto"
+      ? "Devuelto"
+      : prestamo.vencido
+        ? "Vencido"
+        : "Activo";
+
+    return `
+      <tr>
+        <td>${escapeHtml(prestamo.libro?.titulo ?? "")}</td>
+        <td>${escapeHtml(socio)}</td>
+        <td>${escapeHtml(prestamo.fecha_prestamo?.substring(0, 10) ?? "")}</td>
+        <td>${escapeHtml(prestamo.fecha_devolucion_esperada?.substring(0, 10) ?? "")}</td>
+        <td>${escapeHtml(estado)}</td>
+        <td>${escapeHtml(prestamo.dias_retraso ?? 0)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  const html = `
+    <!doctype html>
+    <html lang="es">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Informe de préstamos</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 32px;
+            color: #1f2937;
+          }
+          h1 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 28px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #d1d5db;
+          }
+          th, td {
+            border: 1px solid #e5e7eb;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 12px;
+          }
+          th {
+            background: #f3f4f6;
+          }
+          .subtitulo {
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #4b5563;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Informe de préstamos</h1>
+        <div class="subtitulo">Fecha de generación: ${new Date().toLocaleDateString("es-ES")}</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Libro</th>
+              <th>Socio</th>
+              <th>Fecha préstamo</th>
+              <th>Fecha devolución esperada</th>
+              <th>Estado</th>
+              <th>Días de retraso</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filas}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
+
+  const ventana = window.open("", "_blank", "width=900,height=700");
+  if (!ventana) {
+    setError("El navegador bloqueó la ventana del informe. Permite las ventanas emergentes para generar el PDF.");
+    return;
+  }
+
+  ventana.document.write(html);
+  ventana.document.close();
+  ventana.focus();
+
+  setTimeout(() => {
+    ventana.print();
+    ventana.close();
+  }, 300);
+};
+
 function Prestamos() {
   const [prestamos, setPrestamos] = useState([]);
   const [libros, setLibros] = useState([]);
@@ -75,9 +185,14 @@ function Prestamos() {
     <section>
       <div className="page-header">
         <h1>Préstamos y Devoluciones</h1>
-        <button onClick={() => setModalAbierto(true)} className="boton-primario">
-          + Registrar nuevo préstamo
+        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+          <button type="button" className="secundario" onClick={() => descargarInformePdf(prestamos, setError)}>
+            Exportar a PDF
           </button>
+          <button onClick={() => setModalAbierto(true)} className="boton-primario">
+            + Registrar nuevo préstamo
+          </button>
+        </div>
       </div>
 
       {error && <div className="alerta error">{error}</div>}
