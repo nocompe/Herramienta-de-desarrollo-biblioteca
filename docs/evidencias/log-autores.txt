@@ -1,0 +1,33 @@
+92ca524|nocompe|2026-09-13|Merge branch 'main' into develop - mejoras de UI/UX e informe corregido
+a2a73a9|nocompe|2026-09-13|Merge branch 'main' de origin - integrar mejoras de UI/UX de balvinsebas64-prog
+fec06c2|nocompe|2026-09-13|chore: ignorar archivos temporales de Office y quitar el bloqueo subido por error
+6a0ac21|nocompe|2026-09-13|docs: corregir portada, indice y encabezado del informe del Avance 1
+8eb63c1|nocompe|2026-09-13|Merge branch 'develop' into main - correcciones del informe
+56502d3|balvinsebas64-prog|2026-09-10|Mejoras de UI/UX: rediseño del Dashboard, fondo con olas y simulación de Login
+5f61eae|nocompe|2026-09-08|Merge branch 'develop' into main - informe del Avance 1
+dc30c21|nocompe|2026-09-08|docs: agregar informe del Avance 1 en formato Word
+252986a|nocompe|2026-09-08|Merge branch 'develop' into main - documentacion y evidencias
+08d4e00|nocompe|2026-09-08|docs: agregar evidencias de comandos Git, diagramas y capturas del sistema
+cac8659|nocompe|2026-09-08|Merge branch 'hotfix/respuestas-json' into develop
+012289e|nocompe|2026-09-08|fix(api): forzar respuestas JSON en /api/* para que los errores de validacion no devuelvan HTML
+6ea7e9d|nocompe|2026-09-08|Merge branch 'develop' into main - Release v1.0.0
+042c47b|nocompe|2026-09-08|Merge branch 'hotfix/respuestas-json' into main
+8f0e25c|nocompe|2026-09-08|docs(readme): documentar modulos, endpoints de la API e instrucciones de instalacion
+29992d0|nocompe|2026-09-08|style(ui): redisenar Navbar con identidad de marca y estilos del dashboard
+f7a8ba7|nocompe|2026-09-08|Merge branch 'feature/reportes-dashboard' into develop
+196fbc3|aandrexx|2026-09-08|Merge branch 'feature/prestamos' into develop
+e606356|nocompe|2026-09-08|feat(dashboard): agregar Dashboard.jsx con tarjetas de indicadores y prestamos vencidos
+0db52f5|nocompe|2026-09-08|feat(reportes): implementar ReporteController con indicadores y ranking de libros
+3a50c2e|aandrexx|2026-09-08|feat(prestamos): agregar pagina Prestamos.jsx con devolucion y calculo de retraso
+02be4fd|aandrexx|2026-09-08|feat(prestamos): implementar registro de prestamo con las cuatro reglas de negocio
+a14aad6|aandrexx|2026-09-08|feat(prestamos): crear migracion y modelo Prestamo con relaciones a libro y socio
+0dbfb27|ChrisA9683|2026-09-08|feat(socios): agregar pagina Socios.jsx con suspension y reactivacion de socios
+98c38bb|ChrisA9683|2026-09-08|Merge branch 'feature/gestion-socios' into develop
+d9bdff3|ChrisA9683|2026-09-08|feat(socios): implementar SocioController con validacion de DNI y correo unicos
+fd60ae2|ChrisA9683|2026-09-08|feat(socios): crear migracion y modelo Socio con limites de prestamo por tipo
+e121337|yeffdx|2026-09-08|feat(libros): agregar pagina Libros.jsx con formulario, tabla y seeder de datos
+cdb137c|yeffdx|2026-09-08|Merge branch 'feature/catalogo-libros' into develop
+98291c4|yeffdx|2026-09-08|feat(libros): implementar LibroController con CRUD y busqueda por titulo, autor e ISBN
+d4fbc2c|nocompe|2026-09-08|docs: agregar README del proyecto y guia para colaboradores
+95d64e9|yeffdx|2026-09-08|feat(libros): crear migracion y modelo Libro con control de ejemplares
+b5b4952|nocompe|2026-09-08|chore: inicializar proyecto con Laravel 12 (backend) y React 19 + Vite (frontend)
