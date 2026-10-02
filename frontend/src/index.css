@@ -1012,3 +1012,90 @@ td button {
 .alerta-indicador .indicador-etiqueta {
   color: #f87171;
 }
+
+/* Estilos para filtro de fechas */
+.filtro-fechas {
+  background: #f9fafb;
+  border: 2px solid var(--borde);
+  margin-bottom: 1.5rem;
+}
+
+.filtro-fechas h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--gris-oscuro);
+}
+
+.filtro-controles {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.grupo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.grupo-campo label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--gris-oscuro);
+}
+
+.grupo-campo input[type="date"] {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.grupo-campo input[type="date"]:focus {
+  outline: none;
+  border-color: var(--rojo-utp);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primario {
+  background: var(--rojo-utp);
+  color: white;
+}
+
+.btn-primario:hover {
+  background: #a00825;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secundario {
+  background: var(--gris-medio);
+  color: white;
+}
+
+.btn-secundario:hover {
+  background: #3d4a5c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filtro-activo {
+  margin: 0;
+  padding-top: 0.5rem;
+  color: var(--verde);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
