@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         // --- SEEDERS MODULO 2 ---
         $this->call(SocioSeeder::class);
         // --- SEEDERS MODULO 3 ---
+        $this->call(PrestamoSeeder::class);
     }
 }

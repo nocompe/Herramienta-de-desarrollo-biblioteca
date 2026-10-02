@@ -1,0 +1,42 @@
+*   cac8659 (develop) Merge branch 'hotfix/respuestas-json' into develop
+|\  
+| | *   042c47b (HEAD -> main, tag: v1.0.1) Merge branch 'hotfix/respuestas-json' into main
+| | |\  
+| | |/  
+| |/|   
+| * | 012289e (hotfix/respuestas-json) fix(api): forzar respuestas JSON en /api/* para que los errores de validacion no devuelvan HTML
+| |/  
+| *   6ea7e9d (tag: v1.0.0) Merge branch 'develop' into main - Release v1.0.0
+| |\  
+| |/  
+|/|   
+* | 8f0e25c docs(readme): documentar modulos, endpoints de la API e instrucciones de instalacion
+* |   f7a8ba7 Merge branch 'feature/reportes-dashboard' into develop
+|\ \  
+| * | 29992d0 (feature/reportes-dashboard) style(ui): redisenar Navbar con identidad de marca y estilos del dashboard
+| * | e606356 feat(dashboard): agregar Dashboard.jsx con tarjetas de indicadores y prestamos vencidos
+| * | 0db52f5 feat(reportes): implementar ReporteController con indicadores y ranking de libros
+* | |   196fbc3 Merge branch 'feature/prestamos' into develop
+|\ \ \  
+| |/ /  
+|/| |   
+| * | 3a50c2e (feature/prestamos) feat(prestamos): agregar pagina Prestamos.jsx con devolucion y calculo de retraso
+| * | 02be4fd feat(prestamos): implementar registro de prestamo con las cuatro reglas de negocio
+| * | a14aad6 feat(prestamos): crear migracion y modelo Prestamo con relaciones a libro y socio
+|/ /  
+* |   98c38bb Merge branch 'feature/gestion-socios' into develop
+|\ \  
+| * | 0dbfb27 (feature/gestion-socios) feat(socios): agregar pagina Socios.jsx con suspension y reactivacion de socios
+| * | d9bdff3 feat(socios): implementar SocioController con validacion de DNI y correo unicos
+| * | fd60ae2 feat(socios): crear migracion y modelo Socio con limites de prestamo por tipo
+|/ /  
+* |   cdb137c Merge branch 'feature/catalogo-libros' into develop
+|\ \  
+| |/  
+|/|   
+| * e121337 (feature/catalogo-libros) feat(libros): agregar pagina Libros.jsx con formulario, tabla y seeder de datos
+| * 98291c4 feat(libros): implementar LibroController con CRUD y busqueda por titulo, autor e ISBN
+| * 95d64e9 feat(libros): crear migracion y modelo Libro con control de ejemplares
+|/  
+* d4fbc2c docs: agregar README del proyecto y guia para colaboradores
+* b5b4952 chore: inicializar proyecto con Laravel 12 (backend) y React 19 + Vite (frontend)
