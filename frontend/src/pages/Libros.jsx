@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import client from "../api/client.js";
 
 const FORMULARIO_VACIO = {
@@ -22,45 +22,72 @@ function Libros() {
   const [buscar, setBuscar] = useState("");
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
+  const [cargando, setCargando] = useState(false);
+  const [guardando, setGuardando] = useState(false);
+  const [eliminandoId, setEliminandoId] = useState(null);
+  const solicitudId = useRef(0);
 
-  const cargarLibros = async (texto = "") => {
+  const cargarLibros = useCallback(async (texto = "") => {
+    const idActual = ++solicitudId.current;
+    setCargando(true);
     try {
       const { data } = await client.get("/libros", {
         params: texto ? { buscar: texto } : {},
       });
+      if (idActual !== solicitudId.current) return;
       setLibros(data.datos);
       setError("");
     } catch (e) {
-      setError(e.message);
+      if (idActual === solicitudId.current) setError(e.message);
+    } finally {
+      if (idActual === solicitudId.current) setCargando(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    cargarLibros();
-  }, []);
+    const temporizador = window.setTimeout(
+      () => cargarLibros(buscar.trim()),
+      buscar ? 300 : 0
+    );
+    return () => {
+      window.clearTimeout(temporizador);
+      solicitudId.current += 1;
+    };
+  }, [buscar, cargarLibros]);
 
   const cambiar = (evento) => {
     const { name, value } = evento.target;
     setFormulario((previo) => ({ ...previo, [name]: value }));
+    setError("");
+    setExito("");
   };
 
   const guardar = async (evento) => {
     evento.preventDefault();
     setError("");
     setExito("");
+    setGuardando(true);
+    const datosLibro = {
+      ...formulario,
+      anio_publicacion:
+        formulario.anio_publicacion === "" ? null : Number(formulario.anio_publicacion),
+      ejemplares_totales: Number(formulario.ejemplares_totales),
+    };
     try {
       if (editandoId) {
-        await client.put("/libros/" + editandoId, formulario);
+        await client.put("/libros/" + editandoId, datosLibro);
         setExito("Libro actualizado correctamente.");
       } else {
-        await client.post("/libros", formulario);
+        await client.post("/libros", datosLibro);
         setExito("Libro registrado correctamente.");
       }
       setFormulario(FORMULARIO_VACIO);
       setEditandoId(null);
-      cargarLibros(buscar);
+      await cargarLibros(buscar.trim());
     } catch (e) {
       setError(e.message);
+    } finally {
+      setGuardando(false);
     }
   };
 
@@ -75,26 +102,40 @@ function Libros() {
       anio_publicacion: libro.anio_publicacion || "",
       ejemplares_totales: libro.ejemplares_totales,
     });
+    setError("");
+    setExito("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const eliminar = async (libro) => {
     if (!window.confirm("Eliminar el libro: " + libro.titulo + "?")) return;
+    setError("");
+    setExito("");
+    setEliminandoId(libro.id);
     try {
       await client.delete("/libros/" + libro.id);
       setExito("Libro eliminado correctamente.");
-      cargarLibros(buscar);
+      await cargarLibros(buscar.trim());
     } catch (e) {
       setError(e.message);
+    } finally {
+      setEliminandoId(null);
     }
+  };
+
+  const cancelarEdicion = () => {
+    setEditandoId(null);
+    setFormulario(FORMULARIO_VACIO);
+    setError("");
+    setExito("");
   };
 
   return (
     <section>
       <h1>Catalogo de Libros</h1>
 
-      {error && <div className="alerta error">{error}</div>}
-      {exito && <div className="alerta exito">{exito}</div>}
+      {error && <div className="alerta error" role="alert">{error}</div>}
+      {exito && <div className="alerta exito" role="status">{exito}</div>}
 
       <div className="tarjeta">
         <h2>{editandoId ? "Editar libro" : "Registrar nuevo libro"}</h2>
@@ -127,22 +168,21 @@ function Libros() {
           </div>
           <div>
             <label htmlFor="anio">Anio de publicacion</label>
-            <input id="anio" name="anio_publicacion" type="number" value={formulario.anio_publicacion} onChange={cambiar} />
+            <input id="anio" name="anio_publicacion" type="number" min="0" step="1" value={formulario.anio_publicacion} onChange={cambiar} />
           </div>
           <div>
             <label htmlFor="ejemplares">Ejemplares</label>
-            <input id="ejemplares" name="ejemplares_totales" type="number" min="1" value={formulario.ejemplares_totales} onChange={cambiar} required />
+            <input id="ejemplares" name="ejemplares_totales" type="number" min="1" step="1" value={formulario.ejemplares_totales} onChange={cambiar} required />
           </div>
           <div>
-            <button type="submit">{editandoId ? "Actualizar" : "Registrar"}</button>{" "}
+            <button type="submit" disabled={guardando}>
+              {guardando ? "Guardando..." : editandoId ? "Actualizar" : "Registrar"}
+            </button>{" "}
             {editandoId && (
               <button
                 type="button"
                 className="secundario"
-                onClick={() => {
-                  setEditandoId(null);
-                  setFormulario(FORMULARIO_VACIO);
-                }}
+                onClick={cancelarEdicion}
               >
                 Cancelar
               </button>
@@ -158,27 +198,39 @@ function Libros() {
           value={buscar}
           onChange={(e) => {
             setBuscar(e.target.value);
-            cargarLibros(e.target.value);
           }}
           placeholder="Ej. Vargas Llosa"
         />
       </div>
 
+      {cargando && libros.length > 0 && (
+        <p role="status">Actualizando resultados...</p>
+      )}
+
       <table>
         <thead>
           <tr>
-            <th>Titulo</th>
-            <th>Autor</th>
-            <th>ISBN</th>
-            <th>Categoria</th>
-            <th>Disponibles</th>
-            <th>Acciones</th>
+            <th scope="col">Titulo</th>
+            <th scope="col">Autor</th>
+            <th scope="col">ISBN</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Disponibles</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {libros.length === 0 && (
+          {cargando && libros.length === 0 && (
             <tr>
-              <td colSpan="6">No hay libros registrados.</td>
+              <td colSpan="6" role="status">Cargando libros...</td>
+            </tr>
+          )}
+          {!cargando && libros.length === 0 && (
+            <tr>
+              <td colSpan="6">
+                {buscar.trim()
+                  ? "No se encontraron libros con esa búsqueda."
+                  : "No hay libros registrados."}
+              </td>
             </tr>
           )}
           {libros.map((libro) => (
@@ -196,8 +248,12 @@ function Libros() {
                 <button className="secundario" onClick={() => editar(libro)}>
                   Editar
                 </button>{" "}
-                <button className="peligro" onClick={() => eliminar(libro)}>
-                  Eliminar
+                <button
+                  className="peligro"
+                  onClick={() => eliminar(libro)}
+                  disabled={eliminandoId === libro.id}
+                >
+                  {eliminandoId === libro.id ? "Eliminando..." : "Eliminar"}
                 </button>
               </td>
             </tr>
