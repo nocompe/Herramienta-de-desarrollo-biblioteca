@@ -104,4 +104,29 @@ class SocioController extends Controller
 
         return response()->json(['mensaje' => 'Socio eliminado correctamente.']);
     }
+
+    /**
+     * Retorna el historial de prestamos del socio con el libro asociado.
+     */
+    public function prestamos(Socio $socio): JsonResponse
+    {
+        $prestamos = $socio->prestamos()
+            ->with('libro')
+            ->orderByDesc('fecha_prestamo')
+            ->get();
+
+        return response()->json([
+            'datos' => $prestamos,
+            'total' => $prestamos->count(),
+            'activos' => $prestamos->where('estado', 'activo')->count(),
+            'socio' => [
+                'id' => $socio->id,
+                'nombre_completo' => $socio->nombre_completo,
+                'dni' => $socio->dni,
+                'tipo' => $socio->tipo,
+                'limite_prestamos' => $socio->limitePrestamos(),
+                'estado' => $socio->estado,
+            ],
+        ]);
+    }
 }
