@@ -21,6 +21,7 @@ function Socios() {
   const [buscar, setBuscar] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("todos"); // todos, activo, suspendido
   const [filtroTipo, setFiltroTipo] = useState("todos"); // todos, estudiante, docente, externo
+  const [modoVista, setModoVista] = useState("tabla"); // "tabla" | "tarjetas"
   const [modalAbierto, setModalAbierto] = useState(false);
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
@@ -445,14 +446,61 @@ function Socios() {
           />
         </div>
 
-        <div style={{ fontSize: "0.8rem", color: "var(--gris-medio)", textAlign: "right" }}>
-          Mostrando <strong>{sociosFiltrados.length}</strong> de <strong>{socios.length}</strong> socios registrados
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+          {/* Selector de Modo de Vista */}
+          <div style={{ display: "inline-flex", background: "#f1f5f9", padding: "3px", borderRadius: "8px", border: "1px solid #cbd5e1", gap: "3px" }}>
+            <button
+              type="button"
+              onClick={() => setModoVista("tabla")}
+              style={{
+                padding: "5px 12px",
+                fontSize: "0.82rem",
+                fontWeight: "700",
+                borderRadius: "6px",
+                border: "none",
+                background: modoVista === "tabla" ? "var(--rojo-utp)" : "transparent",
+                color: modoVista === "tabla" ? "#fff" : "var(--gris-oscuro)",
+                boxShadow: modoVista === "tabla" ? "0 2px 4px rgba(200, 16, 46, 0.25)" : "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              <span>📋</span> Vista Tabla
+            </button>
+            <button
+              type="button"
+              onClick={() => setModoVista("tarjetas")}
+              style={{
+                padding: "5px 12px",
+                fontSize: "0.82rem",
+                fontWeight: "700",
+                borderRadius: "6px",
+                border: "none",
+                background: modoVista === "tarjetas" ? "var(--rojo-utp)" : "transparent",
+                color: modoVista === "tarjetas" ? "#fff" : "var(--gris-oscuro)",
+                boxShadow: modoVista === "tarjetas" ? "0 2px 4px rgba(200, 16, 46, 0.25)" : "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              <span>🗂️</span> Vista Tarjetas
+            </button>
+          </div>
+
+          <div style={{ fontSize: "0.8rem", color: "var(--gris-medio)" }}>
+            Mostrando <strong>{sociosFiltrados.length}</strong> de <strong>{socios.length}</strong> socios registrados
+          </div>
         </div>
       </div>
 
-      {/* Tabla Premium */}
-      <div style={{ background: "#fff", borderRadius: "10px", border: "1px solid var(--borde)", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
-        <table style={{ margin: 0, border: "none" }}>
+      {/* VISTA 1: TABLA PREMIUM */}
+      {modoVista === "tabla" && (
+        <div style={{ background: "#fff", borderRadius: "10px", border: "1px solid var(--borde)", overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+          <table style={{ margin: 0, border: "none" }}>
           <thead>
             <tr style={{ background: "#f8fafc", borderBottom: "2px solid #e2e8f0" }}>
               <th style={{ padding: "0.85rem 1rem", fontSize: "0.82rem" }}>SOCIO / LECTOR</th>
@@ -627,6 +675,268 @@ function Socios() {
           </tbody>
         </table>
       </div>
+      )}
+
+      {/* VISTA 2: TARJETAS (CARDS GRID) */}
+      {modoVista === "tarjetas" && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gap: "1.2rem",
+          }}
+        >
+          {sociosFiltrados.length === 0 && (
+            <div
+              style={{
+                gridColumn: "1 / -1",
+                textAlign: "center",
+                padding: "3rem 1rem",
+                background: "#fff",
+                borderRadius: "12px",
+                border: "1px dashed #cbd5e1",
+                color: "var(--gris-medio)",
+              }}
+            >
+              <div style={{ fontSize: "2.2rem", marginBottom: "0.5rem" }}>🔎</div>
+              <div style={{ fontWeight: "700", fontSize: "1.1rem", color: "#334155" }}>No se encontraron socios</div>
+              <div style={{ fontSize: "0.88rem", marginTop: "4px" }}>Intenta ajustar los filtros de búsqueda o registra un nuevo socio.</div>
+            </div>
+          )}
+
+          {sociosFiltrados.map((socio) => {
+            const badgeTipo = getBadgeTipoInfo(socio.tipo);
+            return (
+              <div
+                key={socio.id}
+                style={{
+                  background: "#fff",
+                  borderRadius: "12px",
+                  border: "1px solid #e2e8f0",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  padding: "1.25rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  borderTop: `4px solid ${socio.estado === "activo" ? "var(--verde)" : "#ef4444"}`,
+                }}
+              >
+                <div>
+                  {/* Top Bar: Código & Estado */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.85rem" }}>
+                    <span
+                      style={{
+                        fontSize: "0.74rem",
+                        fontFamily: "monospace",
+                        fontWeight: "700",
+                        color: "#64748b",
+                        background: "#f1f5f9",
+                        padding: "2px 8px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      SOC-{String(socio.id).padStart(5, "0")}
+                    </span>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        padding: "3px 9px",
+                        borderRadius: "999px",
+                        fontSize: "0.74rem",
+                        fontWeight: "700",
+                        backgroundColor: socio.estado === "activo" ? "#dcfce7" : "#fee2e2",
+                        color: socio.estado === "activo" ? "#15803d" : "#b91c1c",
+                      }}
+                    >
+                      <span>●</span> {socio.estado.toUpperCase()}
+                    </span>
+                  </div>
+
+                  {/* Header info con avatar */}
+                  <div style={{ display: "flex", gap: "0.85rem", alignItems: "center", marginBottom: "1rem" }}>
+                    <div
+                      style={{
+                        width: "48px",
+                        height: "48px",
+                        borderRadius: "10px",
+                        background: "linear-gradient(135deg, #c8102e 0%, #8a0c20 100%)",
+                        color: "#fff",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "1.15rem",
+                        fontWeight: "800",
+                        flexShrink: 0,
+                        boxShadow: "0 2px 6px rgba(200, 16, 46, 0.25)",
+                      }}
+                    >
+                      {obtenerIniciales(socio.nombre_completo)}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontSize: "1.02rem",
+                          fontWeight: "800",
+                          color: "#0f172a",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={socio.nombre_completo}
+                      >
+                        {socio.nombres} {socio.apellidos}
+                      </h3>
+                      <div style={{ marginTop: "4px" }}>
+                        <span
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            padding: "2px 7px",
+                            borderRadius: "4px",
+                            fontSize: "0.74rem",
+                            fontWeight: "700",
+                            backgroundColor: badgeTipo.bg,
+                            color: badgeTipo.color,
+                          }}
+                        >
+                          {badgeTipo.icon} {badgeTipo.label}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Detalle Datos */}
+                  <div
+                    style={{
+                      background: "#f8fafc",
+                      borderRadius: "8px",
+                      padding: "0.75rem",
+                      fontSize: "0.82rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "6px",
+                      marginBottom: "1rem",
+                      border: "1px solid #f1f5f9",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ color: "#64748b" }}>🪪 DNI:</span>
+                      <strong style={{ color: "#1e293b" }}>{socio.dni}</strong>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", overflow: "hidden" }}>
+                      <span style={{ color: "#64748b" }}>✉️ Correo:</span>
+                      <span
+                        style={{
+                          color: "#1e293b",
+                          fontWeight: "500",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          maxWidth: "180px",
+                        }}
+                        title={socio.correo}
+                      >
+                        {socio.correo}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ color: "#64748b" }}>📞 Teléfono:</span>
+                      <span style={{ color: socio.telefono ? "#1e293b" : "#94a3b8", fontStyle: socio.telefono ? "normal" : "italic" }}>
+                        {socio.telefono || "Sin registrar"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Acciones */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px", paddingTop: "0.5rem", borderTop: "1px solid #f1f5f9" }}>
+                  <button
+                    type="button"
+                    onClick={() => setModalCarnetSocio(socio)}
+                    style={{
+                      padding: "6px 8px",
+                      fontSize: "0.78rem",
+                      fontWeight: "700",
+                      borderRadius: "6px",
+                      background: "#e0f2fe",
+                      color: "#0369a1",
+                      border: "1px solid #bae6fd",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    🪪 Carnet
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => abrirHistorial(socio)}
+                    style={{
+                      padding: "6px 8px",
+                      fontSize: "0.78rem",
+                      fontWeight: "700",
+                      borderRadius: "6px",
+                      background: "#fef3c7",
+                      color: "#b45309",
+                      border: "1px solid #fde68a",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    📚 Préstamos
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => abrirModalEditar(socio)}
+                    style={{
+                      padding: "6px 8px",
+                      fontSize: "0.78rem",
+                      fontWeight: "700",
+                      borderRadius: "6px",
+                      background: "#f1f5f9",
+                      color: "#334155",
+                      border: "1px solid #cbd5e1",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    ✏️ Editar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => cambiarEstado(socio)}
+                    style={{
+                      padding: "6px 8px",
+                      fontSize: "0.78rem",
+                      fontWeight: "700",
+                      borderRadius: "6px",
+                      background: socio.estado === "activo" ? "#ef4444" : "var(--verde)",
+                      color: "#fff",
+                      border: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    {socio.estado === "activo" ? "⏸️ Suspender" : "▶️ Reactivar"}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* MODAL POP-UP PARA REGISTRO Y EDICION */}
       {modalAbierto && (
