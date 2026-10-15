@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Socio extends Model
 {
@@ -48,5 +49,10 @@ class Socio extends Model
     public function estaActivo(): bool
     {
         return $this->estado === 'activo';
+    }
+
+    public function prestamos(): HasMany
+    {
+        return $this->hasMany(Prestamo::class, 'socio_id');
     }
 }
