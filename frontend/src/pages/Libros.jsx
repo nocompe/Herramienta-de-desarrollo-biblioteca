@@ -179,11 +179,7 @@ function Libros() {
               {guardando ? "Guardando..." : editandoId ? "Actualizar" : "Registrar"}
             </button>{" "}
             {editandoId && (
-              <button
-                type="button"
-                className="secundario"
-                onClick={cancelarEdicion}
-              >
+              <button type="button" className="secundario" onClick={cancelarEdicion}>
                 Cancelar
               </button>
             )}
@@ -204,62 +200,59 @@ function Libros() {
       </div>
 
       {cargando && libros.length > 0 && (
-        <p role="status">Actualizando resultados...</p>
+        <p className="catalogo-estado" role="status">Actualizando resultados...</p>
       )}
 
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Titulo</th>
-            <th scope="col">Autor</th>
-            <th scope="col">ISBN</th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Disponibles</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cargando && libros.length === 0 && (
-            <tr>
-              <td colSpan="6" role="status">Cargando libros...</td>
-            </tr>
-          )}
-          {!cargando && libros.length === 0 && (
-            <tr>
-              <td colSpan="6">
-                {buscar.trim()
-                  ? "No se encontraron libros con esa búsqueda."
-                  : "No hay libros registrados."}
-              </td>
-            </tr>
-          )}
-          {libros.map((libro) => (
-            <tr key={libro.id}>
-              <td>{libro.titulo}</td>
-              <td>{libro.autor}</td>
-              <td>{libro.isbn}</td>
-              <td>{libro.categoria}</td>
-              <td>
-                <span className={libro.ejemplares_disponibles > 0 ? "badge activo" : "badge inactivo"}>
-                  {libro.ejemplares_disponibles} / {libro.ejemplares_totales}
-                </span>
-              </td>
-              <td>
-                <button className="secundario" onClick={() => editar(libro)}>
-                  Editar
-                </button>{" "}
-                <button
-                  className="peligro"
-                  onClick={() => eliminar(libro)}
-                  disabled={eliminandoId === libro.id}
-                >
-                  {eliminandoId === libro.id ? "Eliminando..." : "Eliminar"}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {cargando && libros.length === 0 ? (
+        <p className="catalogo-vacio" role="status">Cargando libros...</p>
+      ) : libros.length === 0 ? (
+        <p className="catalogo-vacio">
+          {buscar.trim()
+            ? "No se encontraron libros con esa búsqueda."
+            : "No hay libros registrados todavía."}
+        </p>
+      ) : (
+        <div className="catalogo-grid">
+          {libros.map((libro) => {
+            const variacionPortada = Array.from(libro.isbn).reduce(
+              (total, caracter) => total + caracter.charCodeAt(0),
+              0
+            ) % 4;
+
+            return (
+              <article className="libro-card" key={libro.id}>
+                <div className={`libro-portada libro-portada-${variacionPortada}`} aria-hidden="true">
+                  <span className="libro-portada-editorial">{libro.editorial || libro.categoria}</span>
+                  <strong>{libro.titulo}</strong>
+                  <span className="libro-portada-autor">{libro.autor}</span>
+                </div>
+                <div className="libro-card-contenido">
+                  <span className="libro-categoria">{libro.categoria}</span>
+                  <h2>{libro.titulo}</h2>
+                  <p className="libro-autor">{libro.autor}</p>
+                  <p className="libro-isbn">ISBN: {libro.isbn}</p>
+                  <span className={`libro-disponibilidad ${libro.ejemplares_disponibles > 0 ? "disponible" : "agotado"}`}>
+                    {libro.ejemplares_disponibles} / {libro.ejemplares_totales} disponibles
+                  </span>
+                </div>
+                <div className="libro-card-acciones">
+                  <button type="button" className="secundario" onClick={() => editar(libro)}>
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    className="peligro"
+                    onClick={() => eliminar(libro)}
+                    disabled={eliminandoId === libro.id}
+                  >
+                    {eliminandoId === libro.id ? "Eliminando..." : "Eliminar"}
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
