@@ -216,3 +216,185 @@ button.peligro {
   background: #f1f3f5;
   color: var(--gris-medio);
 }
+
+.catalogo-estado {
+  color: var(--gris-medio);
+  font-size: 0.9rem;
+}
+
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.libro-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgb(31 41 51 / 6%);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.libro-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgb(31 41 51 / 12%);
+}
+
+.libro-portada {
+  display: flex;
+  position: relative;
+  min-height: 250px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  margin: 1rem 1rem 0;
+  padding: 1.15rem 1rem;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(145deg, #1e3a5f, #327a8c);
+  box-shadow: 0 4px 12px rgb(31 41 51 / 18%);
+}
+
+.libro-portada::before,
+.libro-portada::after {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 50%;
+  content: "";
+}
+
+.libro-portada::before {
+  top: -95px;
+  right: -65px;
+}
+
+.libro-portada::after {
+  bottom: -125px;
+  left: -65px;
+  width: 220px;
+  height: 220px;
+}
+
+.libro-portada strong,
+.libro-portada-editorial,
+.libro-portada-autor {
+  position: relative;
+  z-index: 1;
+}
+
+.libro-portada strong {
+  max-width: 100%;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.libro-portada-editorial,
+.libro-portada-autor {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.libro-portada-1 {
+  background: linear-gradient(145deg, #9d3f36, #d28456);
+}
+
+.libro-portada-2 {
+  background: linear-gradient(145deg, #294b3c, #7c9c69);
+}
+
+.libro-portada-3 {
+  background: linear-gradient(145deg, #403766, #8276a9);
+}
+
+.libro-card-contenido {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem 1rem 1.15rem;
+}
+
+.libro-categoria {
+  color: var(--rojo-utp);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.libro-card h2 {
+  margin: 0.45rem 0 0.25rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.libro-autor {
+  color: var(--gris-medio);
+  font-size: 0.88rem;
+  margin: 0 0 0.5rem;
+}
+
+.libro-isbn {
+  color: var(--gris-medio);
+  font-size: 0.75rem;
+  margin: 0 0 0.9rem;
+}
+
+.libro-disponibilidad {
+  margin-top: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.libro-disponibilidad.disponible {
+  color: #187344;
+}
+
+.libro-disponibilidad.agotado {
+  color: #b3261e;
+}
+
+.libro-card-acciones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--borde);
+}
+
+.libro-card-acciones button {
+  padding-inline: 0.5rem;
+}
+
+.catalogo-vacio {
+  padding: 2rem 1rem;
+  border: 1px dashed var(--borde);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--gris-medio);
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .libro-portada {
+    min-height: 230px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .libro-card {
+    transition: none;
+  }
+}
