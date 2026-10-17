@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import client from "../api/client.js";
+import Modal from "../components/Modal.jsx";
 
 const FORMULARIO_VACIO = {
   titulo: "",
@@ -25,6 +26,7 @@ function Libros() {
   const [cargando, setCargando] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [eliminandoId, setEliminandoId] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
   const solicitudId = useRef(0);
 
   const cargarLibros = useCallback(async (texto = "") => {
@@ -62,6 +64,21 @@ function Libros() {
     setExito("");
   };
 
+  const abrirNuevo = () => {
+    setEditandoId(null);
+    setFormulario(FORMULARIO_VACIO);
+    setError("");
+    setExito("");
+    setModalAbierto(true);
+  };
+
+  const cerrarModal = () => {
+    setModalAbierto(false);
+    setEditandoId(null);
+    setFormulario(FORMULARIO_VACIO);
+    setError("");
+  };
+
   const guardar = async (evento) => {
     evento.preventDefault();
     setError("");
@@ -76,13 +93,14 @@ function Libros() {
     try {
       if (editandoId) {
         await client.put("/libros/" + editandoId, datosLibro);
-        setExito("Libro actualizado correctamente.");
       } else {
         await client.post("/libros", datosLibro);
-        setExito("Libro registrado correctamente.");
       }
-      setFormulario(FORMULARIO_VACIO);
-      setEditandoId(null);
+      const mensaje = editandoId
+        ? "Libro actualizado correctamente."
+        : "Libro registrado correctamente.";
+      cerrarModal();
+      setExito(mensaje);
       await cargarLibros(buscar.trim());
     } catch (e) {
       setError(e.message);
@@ -104,7 +122,7 @@ function Libros() {
     });
     setError("");
     setExito("");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setModalAbierto(true);
   };
 
   const eliminar = async (libro) => {
@@ -123,78 +141,23 @@ function Libros() {
     }
   };
 
-  const cancelarEdicion = () => {
-    setEditandoId(null);
-    setFormulario(FORMULARIO_VACIO);
-    setError("");
-    setExito("");
-  };
-
   return (
-    <section>
-      <h1>Catalogo de Libros</h1>
-
-      {error && <div className="alerta error" role="alert">{error}</div>}
-      {exito && <div className="alerta exito" role="status">{exito}</div>}
-
-      <div className="tarjeta">
-        <h2>{editandoId ? "Editar libro" : "Registrar nuevo libro"}</h2>
-        <form className="formulario" onSubmit={guardar}>
-          <div>
-            <label htmlFor="titulo">Titulo</label>
-            <input id="titulo" name="titulo" value={formulario.titulo} onChange={cambiar} required />
-          </div>
-          <div>
-            <label htmlFor="autor">Autor</label>
-            <input id="autor" name="autor" value={formulario.autor} onChange={cambiar} required />
-          </div>
-          <div>
-            <label htmlFor="isbn">ISBN</label>
-            <input id="isbn" name="isbn" value={formulario.isbn} onChange={cambiar} required />
-          </div>
-          <div>
-            <label htmlFor="editorial">Editorial</label>
-            <input id="editorial" name="editorial" value={formulario.editorial} onChange={cambiar} />
-          </div>
-          <div>
-            <label htmlFor="categoria">Categoria</label>
-            <select id="categoria" name="categoria" value={formulario.categoria} onChange={cambiar}>
-              <option>General</option>
-              <option>Novela</option>
-              <option>Informatica</option>
-              <option>Historia</option>
-              <option>Ciencias</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="anio">Anio de publicacion</label>
-            <input id="anio" name="anio_publicacion" type="number" min="0" step="1" value={formulario.anio_publicacion} onChange={cambiar} />
-          </div>
-          <div>
-            <label htmlFor="ejemplares">Ejemplares</label>
-            <input id="ejemplares" name="ejemplares_totales" type="number" min="1" step="1" value={formulario.ejemplares_totales} onChange={cambiar} required />
-          </div>
-          <div>
-            <button type="submit" disabled={guardando}>
-              {guardando ? "Guardando..." : editandoId ? "Actualizar" : "Registrar"}
-            </button>{" "}
-            {editandoId && (
-              <button type="button" className="secundario" onClick={cancelarEdicion}>
-                Cancelar
-              </button>
-            )}
-          </div>
-        </form>
+    <section className="container" style={{ marginTop: "40px", marginBottom: "40px" }}>
+      <div className="page-header">
+        <h1>Catálogo de Libros</h1>
+        <button type="button" onClick={abrirNuevo}>+ Nuevo Libro</button>
       </div>
+
+      {/* Con el modal abierto el error se muestra dentro de el, no detras. */}
+      {error && !modalAbierto && <div className="alerta error" role="alert">{error}</div>}
+      {exito && <div className="alerta exito" role="status">{exito}</div>}
 
       <div className="tarjeta">
         <label htmlFor="buscar">Buscar por titulo, autor o ISBN</label>
         <input
           id="buscar"
           value={buscar}
-          onChange={(e) => {
-            setBuscar(e.target.value);
-          }}
+          onChange={(e) => setBuscar(e.target.value)}
           placeholder="Ej. Vargas Llosa"
         />
       </div>
@@ -253,6 +216,54 @@ function Libros() {
           })}
         </div>
       )}
+
+      <Modal isOpen={modalAbierto} onClose={cerrarModal} titulo={editandoId ? "Editar libro" : "Registrar nuevo libro"}>
+        <form className="formulario" onSubmit={guardar}>
+          {error && <div className="alerta error" role="alert">{error}</div>}
+          <div>
+            <label htmlFor="titulo">Titulo</label>
+            <input id="titulo" name="titulo" value={formulario.titulo} onChange={cambiar} required />
+          </div>
+          <div>
+            <label htmlFor="autor">Autor</label>
+            <input id="autor" name="autor" value={formulario.autor} onChange={cambiar} required />
+          </div>
+          <div>
+            <label htmlFor="isbn">ISBN</label>
+            <input id="isbn" name="isbn" value={formulario.isbn} onChange={cambiar} required />
+          </div>
+          <div>
+            <label htmlFor="editorial">Editorial</label>
+            <input id="editorial" name="editorial" value={formulario.editorial} onChange={cambiar} />
+          </div>
+          <div>
+            <label htmlFor="categoria">Categoria</label>
+            <select id="categoria" name="categoria" value={formulario.categoria} onChange={cambiar}>
+              <option>General</option>
+              <option>Novela</option>
+              <option>Informatica</option>
+              <option>Historia</option>
+              <option>Ciencias</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="anio">Anio de publicacion</label>
+            <input id="anio" name="anio_publicacion" type="number" min="0" step="1" value={formulario.anio_publicacion} onChange={cambiar} />
+          </div>
+          <div>
+            <label htmlFor="ejemplares">Ejemplares</label>
+            <input id="ejemplares" name="ejemplares_totales" type="number" min="1" step="1" value={formulario.ejemplares_totales} onChange={cambiar} required />
+          </div>
+          <div>
+            <button type="submit" disabled={guardando}>
+              {guardando ? "Guardando..." : editandoId ? "Actualizar" : "Registrar"}
+            </button>
+            <button type="button" className="secundario" onClick={cerrarModal} style={{ marginLeft: "12px" }}>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </Modal>
     </section>
   );
 }
