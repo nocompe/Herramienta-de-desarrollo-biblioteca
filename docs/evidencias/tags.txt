@@ -1,0 +1,2 @@
+v1.0.0          Release v1.0.0 - Avance 1: catalogo, socios, prestamos y reportes
+v1.0.1          Release v1.0.1 - Correccion de respuestas JSON en la API

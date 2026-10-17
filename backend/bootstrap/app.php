@@ -15,5 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Toda peticion a /api/* debe responder SIEMPRE en JSON.
+        // Sin esto, un error de validacion devuelve una redireccion HTML
+        // cuando el cliente no envia la cabecera Accept: application/json.
+        $exceptions->shouldRenderJsonWhen(function ($peticion, Throwable $e) {
+            return $peticion->is('api/*') || $peticion->expectsJson();
+        });
     })->create();
