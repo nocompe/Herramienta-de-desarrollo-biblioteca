@@ -533,6 +533,11 @@ td button {
   gap: 16px;
 }
 
+.hero-actions a {
+  display: inline-block;
+  text-decoration: none;
+}
+
 .btn-primary {
   background-color: #3b82f6;
   color: white;
@@ -1105,6 +1110,16 @@ td button {
   font-size: 0.9rem;
 }
 
+.catalogo-filtros {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+  gap: 20px;
+}
+
+.catalogo-filtros input {
+  width: 100%;
+}
+
 .catalogo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
@@ -1271,6 +1286,10 @@ td button {
 }
 
 @media (max-width: 560px) {
+  .catalogo-filtros {
+    grid-template-columns: 1fr;
+  }
+
   .libro-portada {
     min-height: 230px;
   }
