@@ -12,6 +12,8 @@ const FORMULARIO_VACIO = {
   ejemplares_totales: 1,
 };
 
+const CATEGORIAS = ["General", "Novela", "Informatica", "Historia", "Ciencias"];
+
 /**
  * MODULO 1 - Catalogo de Libros
  * Permite registrar, buscar, editar y eliminar libros del catalogo.
@@ -21,6 +23,7 @@ function Libros() {
   const [formulario, setFormulario] = useState(FORMULARIO_VACIO);
   const [editandoId, setEditandoId] = useState(null);
   const [buscar, setBuscar] = useState("");
+  const [categoria, setCategoria] = useState("");
   const [error, setError] = useState("");
   const [exito, setExito] = useState("");
   const [cargando, setCargando] = useState(false);
@@ -29,12 +32,15 @@ function Libros() {
   const [modalAbierto, setModalAbierto] = useState(false);
   const solicitudId = useRef(0);
 
-  const cargarLibros = useCallback(async (texto = "") => {
+  const cargarLibros = useCallback(async (texto = "", categoriaSeleccionada = "") => {
     const idActual = ++solicitudId.current;
     setCargando(true);
     try {
       const { data } = await client.get("/libros", {
-        params: texto ? { buscar: texto } : {},
+        params: {
+          ...(texto ? { buscar: texto } : {}),
+          ...(categoriaSeleccionada ? { categoria: categoriaSeleccionada } : {}),
+        },
       });
       if (idActual !== solicitudId.current) return;
       setLibros(data.datos);
@@ -48,14 +54,14 @@ function Libros() {
 
   useEffect(() => {
     const temporizador = window.setTimeout(
-      () => cargarLibros(buscar.trim()),
+      () => cargarLibros(buscar.trim(), categoria),
       buscar ? 300 : 0
     );
     return () => {
       window.clearTimeout(temporizador);
       solicitudId.current += 1;
     };
-  }, [buscar, cargarLibros]);
+  }, [buscar, categoria, cargarLibros]);
 
   const cambiar = (evento) => {
     const { name, value } = evento.target;
@@ -101,7 +107,7 @@ function Libros() {
         : "Libro registrado correctamente.";
       cerrarModal();
       setExito(mensaje);
-      await cargarLibros(buscar.trim());
+      await cargarLibros(buscar.trim(), categoria);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -133,7 +139,7 @@ function Libros() {
     try {
       await client.delete("/libros/" + libro.id);
       setExito("Libro eliminado correctamente.");
-      await cargarLibros(buscar.trim());
+      await cargarLibros(buscar.trim(), categoria);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -153,13 +159,30 @@ function Libros() {
       {exito && <div className="alerta exito" role="status">{exito}</div>}
 
       <div className="tarjeta">
-        <label htmlFor="buscar">Buscar por titulo, autor o ISBN</label>
-        <input
-          id="buscar"
-          value={buscar}
-          onChange={(e) => setBuscar(e.target.value)}
-          placeholder="Ej. Vargas Llosa"
-        />
+        <div className="catalogo-filtros">
+          <div>
+            <label htmlFor="buscar">Buscar por titulo, autor o ISBN</label>
+            <input
+              id="buscar"
+              value={buscar}
+              onChange={(e) => setBuscar(e.target.value)}
+              placeholder="Ej. Vargas Llosa"
+            />
+          </div>
+          <div>
+            <label htmlFor="filtro-categoria">Filtrar por categoria</label>
+            <select
+              id="filtro-categoria"
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+            >
+              <option value="">Todas las categorias</option>
+              {CATEGORIAS.map((opcion) => (
+                <option key={opcion} value={opcion}>{opcion}</option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       {cargando && libros.length > 0 && (
@@ -170,8 +193,8 @@ function Libros() {
         <p className="catalogo-vacio" role="status">Cargando libros...</p>
       ) : libros.length === 0 ? (
         <p className="catalogo-vacio">
-          {buscar.trim()
-            ? "No se encontraron libros con esa búsqueda."
+          {buscar.trim() || categoria
+            ? "No se encontraron libros con esos filtros."
             : "No hay libros registrados todavía."}
         </p>
       ) : (
@@ -239,11 +262,9 @@ function Libros() {
           <div>
             <label htmlFor="categoria">Categoria</label>
             <select id="categoria" name="categoria" value={formulario.categoria} onChange={cambiar}>
-              <option>General</option>
-              <option>Novela</option>
-              <option>Informatica</option>
-              <option>Historia</option>
-              <option>Ciencias</option>
+              {CATEGORIAS.map((opcion) => (
+                <option key={opcion} value={opcion}>{opcion}</option>
+              ))}
             </select>
           </div>
           <div>
