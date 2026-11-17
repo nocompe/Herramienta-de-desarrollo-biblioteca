@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Guía del proceso de incidentes
+    url: https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/blob/develop/docs/INCIDENTES.md
+    about: Ciclo de vida, severidades, labels y política de triaje del equipo.

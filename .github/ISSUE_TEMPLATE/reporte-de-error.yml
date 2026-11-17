@@ -1,0 +1,72 @@
+name: Reporte de error
+description: Algo del sistema no funciona como debería.
+title: "[Bug] "
+labels: ["bug", "tipo: fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Antes de reportar, busca en los issues abiertos que el error no esté reportado ya.
+        Un reporte completo se puede reproducir sin preguntarle nada a quien lo escribió.
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo afectado
+      options:
+        - Catálogo de libros
+        - Gestión de socios
+        - Préstamos y devoluciones
+        - Reportes y dashboard
+        - Inicio de sesión / navegación
+        - API (backend)
+    validations:
+      required: true
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Severidad
+      description: Impacto sobre quien usa el sistema.
+      options:
+        - "Crítica: el sistema o un módulo no se puede usar"
+        - "Alta: una función importante falla y no hay alternativa"
+        - "Media: falla, pero hay una forma de seguir trabajando"
+        - "Baja: detalle visual o de texto"
+    validations:
+      required: true
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      description: La secuencia exacta que provoca el error.
+      placeholder: |
+        1. Ir a /dashboard
+        2. Elegir el rango de fechas 01/10 – 31/10
+        3. Pulsar "Filtrar"
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: real
+    attributes:
+      label: Resultado real
+      description: Lo que ocurre en su lugar. Pega el mensaje de error o una captura.
+    validations:
+      required: true
+  - type: input
+    id: entorno
+    attributes:
+      label: Entorno
+      description: Rama o versión, navegador y sistema operativo.
+      placeholder: "develop (0030759) · Chrome 131 · Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidencia adicional
+      description: Logs de Laravel, consola del navegador, respuesta de la API, capturas.
