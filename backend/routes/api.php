@@ -39,6 +39,7 @@ Route::apiResource('libros', \App\Http\Controllers\Api\LibroController::class);
 // --- ZONA MODULO 2: GESTION DE SOCIOS (feature/gestion-socios) ---
 Route::apiResource('socios', \App\Http\Controllers\Api\SocioController::class);
 Route::patch('socios/{socio}/estado', [\App\Http\Controllers\Api\SocioController::class, 'cambiarEstado']);
+Route::get('socios/{socio}/prestamos', [\App\Http\Controllers\Api\SocioController::class, 'prestamos']);
 
 // --- ZONA MODULO 3: PRESTAMOS Y DEVOLUCIONES (feature/prestamos) ---
 Route::get('prestamos', [\App\Http\Controllers\Api\PrestamoController::class, 'index']);

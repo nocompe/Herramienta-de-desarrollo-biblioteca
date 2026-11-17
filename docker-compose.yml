@@ -1,0 +1,17 @@
+services:
+  php:
+    image: php:8.2-fpm
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    environment:
+      - PHP_ENV=local
+    command: >
+      sh -c "apt-get update &&
+      apt-get install -y git curl &&
+      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
+      composer install &&
+      php artisan migrate &&
+      php -S 0.0.0.0:8000 -t public"

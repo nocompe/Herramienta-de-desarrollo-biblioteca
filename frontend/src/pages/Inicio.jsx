@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Inicio = () => {
   return (
@@ -12,8 +13,8 @@ const Inicio = () => {
             y el control de préstamos de manera ágil y moderna.
           </p>
           <div className="hero-actions">
-            <button className="btn-primary">Explorar Catálogo</button>
-            <button className="btn-outline">Ver Préstamos</button>
+            <Link to="/libros" className="btn-primary">Explorar Catálogo</Link>
+            <Link to="/prestamos" className="btn-outline">Ver Préstamos</Link>
           </div>
         </div>
         
