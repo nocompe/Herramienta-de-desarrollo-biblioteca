@@ -1,5 +1,8 @@
 # BiblioTech UTP
 
+[![CI](https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/actions/workflows/ci.yml)
+[![CD](https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/actions/workflows/cd.yml/badge.svg)](https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/actions/workflows/cd.yml)
+
 Sistema de Gestión de Biblioteca desarrollado como Proyecto Final del curso
 **Herramientas de Desarrollo** — Universidad Tecnológica del Perú.
 
@@ -186,3 +189,14 @@ develop ──●──────●───────●────●─
                       feature/prestamos
                            feature/reportes-dashboard
 ```
+
+---
+
+## Integración y entrega continua
+
+| Pipeline | Cuándo corre | Qué hace |
+|---|---|---|
+| **CI** (`ci.yml`) | Cada push y PR a `develop` o `main` | Pruebas PHPUnit del backend, lint y build del frontend |
+| **CD** (`cd.yml`) | PR (ensayo), push a `main` (staging), tag `vX.Y.Z` (producción) | Imagen Docker del backend en GHCR, frontend en GitHub Pages y GitHub Release |
+
+El detalle de cada etapa está en [docs/CICD.md](docs/CICD.md) y el proceso de incidentes en [docs/INCIDENTES.md](docs/INCIDENTES.md).
