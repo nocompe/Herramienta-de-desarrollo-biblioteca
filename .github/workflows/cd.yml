@@ -1,0 +1,152 @@
+# Entrega continua de BiblioTech UTP.
+#
+#   Pull request a develop/main  -> Pruebas + Build (ensayo: no publica nada)
+#   Push a main  (staging)       -> Pruebas + Build + imagen :staging en GHCR + frontend en GitHub Pages
+#   Tag vX.Y.Z   (produccion)    -> Pruebas + Build + imagen :X.Y.Z y :latest en GHCR + GitHub Release
+name: CD
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  IMAGEN: ghcr.io/nocompe/bibliotech-backend
+  BASE_PAGES: /Herramienta-de-desarrollo-biblioteca/
+
+jobs:
+  # 1. Pruebas: reutiliza el workflow de CI (PHPUnit, lint y build).
+  pruebas:
+    uses: ./.github/workflows/ci.yml
+
+  # 2. Build: compila el frontend para Pages y construye la imagen del backend.
+  build:
+    name: Build (frontend + imagen backend)
+    needs: pruebas
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Compilar el frontend
+        working-directory: frontend
+        env:
+          VITE_BASE: ${{ env.BASE_PAGES }}
+          VITE_API_URL: ${{ vars.API_URL }}
+        run: |
+          npm ci
+          npm run build
+          # GitHub Pages no conoce las rutas de React Router: 404.html las redirige a la app.
+          cp dist/index.html dist/404.html
+
+      - name: Guardar el frontend como artefacto
+        uses: actions/upload-artifact@v7
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 14
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Iniciar sesion en GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Etiquetas de la imagen
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.IMAGEN }}
+          tags: |
+            type=raw,value=staging,enable=${{ github.ref == 'refs/heads/main' }}
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
+            type=sha,prefix=sha-
+
+      - name: Construir (y publicar) la imagen del backend
+        uses: docker/build-push-action@v7
+        with:
+          context: backend
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # 3. Staging: cada push a main publica el frontend en GitHub Pages.
+  staging:
+    name: Desplegar staging (GitHub Pages)
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: frontend-dist
+          path: dist
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+      - id: despliegue
+        uses: actions/deploy-pages@v5
+
+  # 4. Produccion: un tag vX.Y.Z publica la version como GitHub Release.
+  produccion:
+    name: Publicar release (produccion)
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    environment:
+      name: production
+      url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: frontend-dist
+          path: dist
+
+      - name: Crear el GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          # Notas: la seccion de esta version en CHANGELOG.md.
+          awk -v v="$VERSION" '$0 ~ "^## \\[" v "\\]" {f=1; next} /^## \[/ {f=0} f' CHANGELOG.md > notas.md
+          {
+            echo ""
+            echo "**Imagen del backend:** \`docker run -p 8000:8000 ${IMAGEN}:${VERSION}\`"
+          } >> notas.md
+          (cd dist && zip -qr "../bibliotech-frontend-${TAG}.zip" .)
+          gh release create "$TAG" "bibliotech-frontend-${TAG}.zip" \
+            --title "BiblioTech UTP ${TAG}" --notes-file notas.md --verify-tag
