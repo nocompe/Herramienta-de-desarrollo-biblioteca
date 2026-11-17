@@ -9,7 +9,7 @@ const escapeHtml = (value = "") =>
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
+    .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
 const descargarInformePdf = (prestamos, setError) => {
@@ -140,7 +140,7 @@ function Prestamos() {
       ]);
       setLibros(resLibros.data.datos);
       setSocios(resSocios.data.datos);
-    } catch (e) { setError("No se pudieron cargar los listados para el formulario."); }
+    } catch { setError("No se pudieron cargar los listados para el formulario."); }
   };
 
   useEffect(() => {
@@ -157,7 +157,7 @@ function Prestamos() {
     evento.preventDefault();
     setError(""); setExito("");
     try {
-      const { data } = await client.post("/prestamos", formulario);
+      await client.post("/prestamos", formulario);
       setExito("Prestamo registrado correctamente.");
       setFormulario(FORMULARIO_VACIO);
       setModalAbierto(false);
