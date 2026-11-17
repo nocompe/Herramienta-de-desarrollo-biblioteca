@@ -2,6 +2,16 @@
 
 Todos los cambios relevantes de BiblioTech UTP. El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y las versiones siguen [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.2.0] - 2026-11-17
+
+### Añadido
+- Pruebas automatizadas de la API con PHPUnit: libros, socios, las 4 reglas de préstamos y reportes; el CI pasa de 3 a 24 pruebas (#18, #30).
+- Plantillas de reporte de error, nueva funcionalidad y pull request, y guía del proceso de incidentes en `docs/INCIDENTES.md` (#27, #31).
+
+### Corregido
+- El dashboard se mostraba pegado a los bordes de la pantalla (#28, #32).
+- Advertencias del lint en el módulo de préstamos (#29, #33).
+
 ## [1.1.0] - 2026-11-17
 
 ### Añadido
@@ -34,6 +44,7 @@ Todos los cambios relevantes de BiblioTech UTP. El formato sigue [Keep a Changel
 - Módulo 3: préstamos y devoluciones (#10).
 - Módulo 4: reportes y dashboard (#11).
 
+[1.2.0]: https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/nocompe/Herramienta-de-desarrollo-biblioteca/releases/tag/v1.0.0
