@@ -1,0 +1,38 @@
+name: Nueva funcionalidad o tarea
+description: Proponer una funcionalidad nueva o planificar una tarea del proyecto.
+labels: ["tipo: feature"]
+body:
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options:
+        - Catálogo de libros
+        - Gestión de socios
+        - Préstamos y devoluciones
+        - Reportes y dashboard
+        - Infraestructura (CI/CD, despliegue, repositorio)
+    validations:
+      required: true
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: Objetivo
+      description: Qué problema resuelve y para quién.
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      description: Una lista que permita decir "terminado" sin discusión.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: input
+    id: rama
+    attributes:
+      label: Rama propuesta
+      placeholder: feature/nombre-de-la-tarea
