@@ -33,11 +33,6 @@ class ReporteController extends Controller
             $devolucionesQuery->whereBetween('fecha_devolucion_real', [$desde, $hasta]);
         }
 
-        // Los scopes modifican el builder sobre el que se llaman: cada conteo
-        // usa una copia para no arrastrar los filtros del anterior (issue #23).
-        $totalPrestamos = (clone $prestamosQuery)->count();
-        $devoluciones = (clone $devolucionesQuery)->count();
-
         return response()->json([
             'rango' => $desde && $hasta ? [
                 'desde' => $desde->toDateString(),
@@ -49,11 +44,11 @@ class ReporteController extends Controller
                 'ejemplares_disponibles' => (int) Libro::sum('ejemplares_disponibles'),
                 'socios_activos' => Socio::where('estado', 'activo')->count(),
                 'socios_suspendidos' => Socio::where('estado', 'suspendido')->count(),
-                'prestamos_activos' => (clone $prestamosQuery)->activos()->count(),
-                'prestamos_vencidos' => (clone $prestamosQuery)->vencidos()->count(),
-                'devoluciones_periodo' => $devoluciones,
-                'tasa_devolucion' => $totalPrestamos > 0
-                    ? round($devoluciones / $totalPrestamos * 100, 2) . '%'
+                'prestamos_activos' => $prestamosQuery->activos()->count(),
+                'prestamos_vencidos' => $prestamosQuery->vencidos()->count(),
+                'devoluciones_periodo' => $devolucionesQuery->count(),
+                'tasa_devolucion' => $prestamosQuery->count() > 0
+                    ? round(($devolucionesQuery->count() / $prestamosQuery->count() * 100), 2) . '%'
                     : '0%',
             ],
         ]);
