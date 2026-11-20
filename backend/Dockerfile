@@ -1,6 +1,13 @@
 # Imagen de produccion del backend de BiblioTech UTP (Laravel 12 + SQLite).
 # La construye y publica el pipeline de CD en ghcr.io.
-FROM composer:2 AS dependencias
+#
+# Las dependencias se instalan con el mismo PHP 8.2 de la imagen final: la
+# imagen composer:2 trae su propio PHP, que cambia de version sin aviso (#36).
+FROM php:8.2-cli AS dependencias
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends unzip \
+    && rm -rf /var/lib/apt/lists/*
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist --no-progress
